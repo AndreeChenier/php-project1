@@ -1,0 +1,123 @@
+<?php 
+
+$fname = $_GET["fname"];
+$lname = $_GET["lname"];
+$whours = $_GET["whours"];
+$wage = $_GET["wage"];
+
+//format names so first letter is capitalized and the rest is lower case
+$fname = formatName($fname);
+$lname = formatName($lname);
+
+//create string of full name for header
+$name = $fname.' '.$lname;
+
+//declare tax rate
+$taxRate = 0.25;
+
+
+// CALCULATIONS //
+
+// if weekly hours are equal or under 40, gross pay is weekly hours x wage
+// else gross pay is regular wage for first 40 hours and each extra hour is time and a half.
+if ($whours <= 40)
+{
+	//call function to calculate regular pay passing weeky hours and wage
+	$regularPay = CalculateRegularPay($whours, $wage);
+	$grossPay = $regularPay;
+	$overtimeHours = 0;
+	$overtimeWage = 0;
+	$overtimePay = 0;
+}
+else 
+{
+	//call function to calculate regular pay for first 40 hours
+	$regularPay = CalculateRegularPay(40, $wage);
+	//determine overtime hours
+	$overtimeHours = $whours - 40;
+	//determine overtime pay rate
+	$overtimeWage = $wage * 1.5;
+	//call function to calculate overtime pay by passing overtime hours and overtime pay rate
+	$overtimePay = CalculateOvertimePay($overtimeHours, $overtimeWage);
+	$grossPay = $regularPay + $overtimePay;
+}
+
+//call function to calculate taxes from gross pay and tax rate;
+$tax = CalculateTaxes($grossPay, $taxRate);
+
+//calculate net pay from gross pay and taxes
+$netPay = $grossPay - $tax;
+
+//format dollar values
+$finalWage = formatCurrency($wage);
+$finalOvertimeWage = formatCurrency($overtimeWage);
+$finalRegularPay = formatCurrency($regularPay);
+$finalNetPay = formatCurrency($netPay);
+$finalGrossPay = formatCurrency($grossPay);
+$finalTax = formatCurrency($tax);
+$finalOvertimeWage = formatCurrency($overtimeWage);
+$finalOvertimePay = formatCurrency($overtimePay);
+
+
+// FUNCTIONS //
+
+//function to format names
+function formatName($string)
+{			
+	$string = strtolower($string);
+	$firstCharacter = substr($string,0,1);	       	
+	$restofString = substr($string,1,strlen($string) -1);		 
+	$formattedString = strtoupper($firstCharacter).$restofString;
+	return $formattedString;
+}
+	
+//function to calculate regular pay
+function CalculateRegularPay($hours, $wageRate) 
+{
+	$regularPay = $hours * $wageRate;
+	return $regularPay;
+}
+
+//function to calculat overtime pay
+function CalculateOvertimePay($hours, $wageRate)
+{
+	$overtimePay = $hours * $wageRate;
+	return $overtimePay;
+}
+
+//function to calculate taxes
+function CalculateTaxes($gross, $taxRate)
+{
+	$tax = $gross * $taxRate;
+	return $tax;
+}
+
+//format currency
+ function formatCurrency($string)
+ {
+		$string = number_format(floatval($string),2);		
+		$string = '$'.$string;		
+		return $string;
+ }
+
+?>
+
+<div class="bodyContent">
+&nbsp;
+<form method='POST' action="" autocomplete='off'>
+	<div class='bodyContent'>
+		<h2><?php echo $name; ?>'s Net Pay</h2>
+		<label for="fname">First Name:</label>&nbsp;<input class="textboxW" type="text" name="fname" value="<?php echo $fname; ?>" />
+		<label for="lname">Last Name:</label>&nbsp;<input class="textboxW" type="text" name="lname" value="<?php echo $lname; ?>" /><br /><br />
+		<div class="textLabel"><label for="whours">Total Hours Worked:</label>&nbsp;<input size="10" class="textboxW" type="text" name="whours" value="<?php echo $whours; ?>" /></div>
+		<div class="textLabel"><label for="overtimeHours">Overtime Hours:</label>&nbsp;<input size="10" class="textboxW" type="text" name="overtimeHours" value="<?php echo $overtimeHours; ?>" /></div>
+		<div class="textLabel"><label for="wage">Normal Pay:</label>&nbsp;<input size="10" class="textboxW" type="text" name="wage" value="<?php echo $finalWage; ?>" /></div>
+		<div class="textLabel"><label for="overtimeWage">Overtime Rate (1.5):</label>&nbsp;<input size="10" class="textboxW" type="text" name="overtimeWage" value="<?php echo $finalOvertimeWage; ?>" /></div>
+		<div class="textLabel"><label for="regularPay">Value of Regular Pay:</label>&nbsp;<input size="10" class="textboxW" type="text" name="regularPay" value="<?php echo $finalRegularPay; ?>" /></div>
+		<div class="textLabel"><label for="overtimePay">Value of Overtime Pay:</label>&nbsp;<input size="10" class="textboxW" type="text" name="overtimePay" value="<?php echo $finalOvertimePay; ?>" /></div>
+		<div class="textLabel"><label for="grossPay"><strong>Gross Pay:</strong></label>&nbsp;<input size="10" class="textboxW" type="text" name="grossPay" value="<?php echo $finalGrossPay; ?>" /></div>
+		<div class="textLabel"><label for="tax">Tax (25%):</label>&nbsp;<input size="10" class="textboxW" type="text" name="tax" value="<?php echo $finalTax; ?>" /></div>
+		<div class="textLabel"><label for="netPay"><strong>Net Pay:</strong></label>&nbsp;<input size="10" class="textboxW" type="text" name="netPay" value="<?php echo $finalNetPay; ?>" /></div>
+	</div>
+</form>
+</div>

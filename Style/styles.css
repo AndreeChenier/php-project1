@@ -1,0 +1,104 @@
+body
+{
+	background-color: white;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #333;
+}
+a{
+	text-decoration:none;
+}
+/*will set the main web page position in the browser */
+.divPage
+{
+	width: 960px;
+	height:530px;	
+	margin-top:12px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-bottom:0px;
+}
+/*will provide a banner image across the top of the web page */
+.header
+{
+	height:95px;
+	background-color: #c9f2f2;
+	color: #ccc;
+}
+
+
+.navbar
+{	
+	height:25px;
+	background-color: #ccc;
+}
+
+.navbutton a
+{
+	float:left;
+	width: 100px;
+	height:25px;
+	line-height:22px;
+	font-size: 14px;
+	color:black;
+	font-weight:700;
+	text-align:center;
+	padding-left:3px;
+	
+}
+
+.navbutton a:hover
+{
+	color:white;
+	font-size: 16px;
+}
+
+.bodyContent
+{	
+	font-size:16px;
+	padding-left: 20px;
+	padding-bottom: 20px;
+	background-color: #f8f8f8;
+	
+}
+
+.textLabel 
+{
+	width: 30%;
+	text-align: right;
+	margin-top: 5px;
+	margin-bottom; 5px;
+}
+
+.labelformat
+{
+	width:135px;
+	text-align:right;
+	float:left;
+}
+
+
+.errorStar
+{
+	color:red;
+	float:left;
+}
+
+
+.footer
+{
+width:960px;
+	height:25px;
+	background-color: #c9f2f2;
+	color: #ccc;
+	font-weight:900;	
+	text-align:center;
+	text-transform:uppercase;	
+}
+
+h1 
+{
+	color: #333;
+	padding-left: 40px;
+	padding-top: 25px;
+	font-size: 30px;
+}
