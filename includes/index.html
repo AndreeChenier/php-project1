@@ -1,0 +1,167 @@
+<?php
+
+	if(isset ($_POST['calculate']))
+	{
+		$errors = array();
+		
+		$fname = $_POST['firstName'];
+		$lname = $_POST['lastName'];
+		$whours = $_POST['weeklyHours'];
+		$wage = $_POST['wage'];
+		
+		// trim all the inputs
+		$fname = trim($fname);
+		$lname = trim($lname);
+		$whours = trim($whours);
+		$wage = trim($wage);
+		
+		//start validating all fields were entered
+	     if(empty($fname))
+		 {			
+			$errors['firstNameEmpty'] = "*";			
+		 }
+		if(empty($lname))
+		{
+			$errors['lastNameEmpty'] = "*";			
+		}
+		if(empty ($whours))
+		{
+			$errors['weeklyHoursEmpty'] = "*";			
+		}
+		if(empty($wage))
+		{
+				$errors['wageEmpty'] = "*";			
+		}
+		
+		validateFname($fname,'firstNamelength');
+		validateLname($lname,'lastNamelength');	
+		weeklyHoursAmount($whours, 'weeklyHoursAmount');
+		wageAmount($wage, 'wageAmount');
+		
+		
+		if(count($errors) == 0)
+		{
+			// redirect user to calculations page
+			header("Location: payCalc.php?fname=".$fname."&lname=".$lname."&whours=".$whours."&wage=".$wage);
+			exit();
+		}
+
+	}
+	else 
+	{
+		$fname = "";
+		$lname = "";
+		$whours = "";
+		$wage = "";
+	}
+	
+// validate the first name is at least 2 characters long
+function validateFname($string, $index)
+{
+	global $errors;
+	if(!empty($string))
+	{
+		if(strlen($string) < 2 || is_numeric($string))
+		{				
+				$errors[$index] = "Must be at least 2 letters long";				
+		}
+	}
+}
+
+// validate the last name is at least 2 characters long and no longer than 25 characters long
+function validateLname($string, $index)
+{
+	global $errors;
+	if(!empty($string))
+	{
+		if(strlen($string) < 2 || strlen($string) > 25 || is_numeric($string)) 
+		{				
+				$errors[$index] = "Must be 2 to 25 letters long ";				
+		}
+	}
+}
+
+// validate that hours are numeric and no more than 60 hours
+function weeklyHoursAmount($string, $index)
+{
+	global $errors;
+	if(!empty($string))
+	{
+		if(!is_numeric($string) ||  $string > 60)
+		{
+			$errors[$index] = "Entry must be numeric and under 60 hours ";
+		}
+	}
+}
+
+//validate that wage is numberic and greater than 10.00
+function wageAmount($string, $index)
+{
+	global $errors;
+	if(!empty($string))
+	{
+		if(!is_numeric($string) ||  $string <= 10)
+		{
+			$errors[$index] = "Hourly wage must be greater than $10.00 ";
+		}
+	}
+}
+
+
+?>
+
+<div class="bodyContent">
+&nbsp;<h2>Employee Information</h2>
+	<form method='POST' action="" autocomplete='off'>
+			<div class="labelformat">
+				<label for="firstname">First Name: </label>
+			</div>
+			<input type="text" name="firstName"  value="<?php echo $fname; ?>" />
+			<div class="errorStar">
+				&nbsp;
+				<?php if(isset($errors['firstNameEmpty'])) echo $errors['firstNameEmpty'];?>			
+				<?php if(isset($errors['firstNamelength'])) echo $errors['firstNamelength'];?>
+				&nbsp;
+			</div>
+			<br /><br />
+			<div class="labelformat">
+				<label for="lastname">Last Name: </label>	
+			</div>
+			<input type="text" name="lastName"  value="<?php echo $lname; ?>" />
+			<div class="errorStar">
+				&nbsp;
+				<?php if(isset($errors['lastNameEmpty'])) echo $errors['lastNameEmpty'];?>
+				<?php if(isset($errors['lastNamelength'])) echo $errors['lastNamelength'];?>
+				&nbsp;
+			</div>			
+			<br /><br />
+			<div class="labelformat">
+				<label for="weeklyHours">Weekly Hours: </label>
+			</div>
+			<input type="text" name="weeklyHours"  value="<?php echo $whours; ?>" />
+			<div class="errorStar">
+				&nbsp;
+				<?php if(isset($errors['weeklyHoursEmpty'])) echo $errors['weeklyHoursEmpty'];?>			
+				<?php if(isset($errors['weeklyHoursAmount'])) echo $errors['weeklyHoursAmount'];?>
+				&nbsp;
+			</div>
+			<br /><br />
+			<div class="labelformat">
+				<label for="wage">Wage: </label>
+			</div>
+			<input type="text" name="wage" value="<?php echo $wage; ?>" />
+			<div class="errorStar">
+				&nbsp;
+				<?php if(isset($errors['wageEmpty'])) echo $errors['wageEmpty'];?>			
+				<?php if(isset($errors['wageAmount'])) echo $errors['wageAmount'];?>
+				&nbsp;
+			</div>
+
+			<br /><br />
+			<div class="textLabel">
+				<input type="submit" name="calculate" width="16px" value = "Calculate">
+			</div>
+			
+	</form>
+
+</div>
